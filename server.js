@@ -1,25 +1,23 @@
 // File created for creating express server
 
+// Imported Express
 const express = require("express"); // It returns a function
-const app = express(); // When we call this function all methods will come
-const path = require("path");
+const app = express(); // Calling this function gives all methods
 const PORT = process.env.PORT || 4000;
+const mainRouter = require("./routes/index"); // Importing router from Routes folder
 
-//  Get request with parameter (route and callback function)
-app.get("/", (req, res) => {
-  // In path.resolve right-most parameter is considered {to}
-  res.sendFile(path.resolve(__dirname) + "/index.html");
-});
+// Using Template engine i.e EJS
+app.set("view engine", "ejs"); // setting which view engine we are using
 
-app.get("/about", (req, res) => {
-  res.sendFile(path.resolve(__dirname) + "/about.html");
-});
+console.log(app.get("view engine")); // ejs
+console.log(app.get("views")); // gives path in which views folder
 
-app.get("/download", (req, res) => {
-  res.download(path.resolve(__dirname) + "/about.html");
-});
+//Using Router -> 1st parameter (route) will be added to all routes of mainRouter
+app.use("/en", mainRouter);
+
+// It we want to change the views folder
+// app.set("views", path.resolve(__dirname) + "/templates");
+// console.log(app.get("views")); // now path  with templates folder
 
 // To create server in express
-app.listen(PORT, () => {
-  console.log(`Express Server Created at PORT ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Express Server Created at PORT ${PORT}`));
