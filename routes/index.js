@@ -1,5 +1,9 @@
 // Importing router from Express
 const router = require("express").Router();
+const apiKeyMiddleware = require("../middlewares/apiKey");
+
+// For using router base middleware
+router.use(apiKeyMiddleware);
 
 //  Get request with parameter (route and callback function)
 router.get("/", (req, res) => {
@@ -20,6 +24,19 @@ router.get("/about", (req, res) => {
 
 router.get("/download", (req, res) => {
   res.download(path.resolve(__dirname) + "/about.html");
+});
+
+router.get("/api/product", (req, res) => {
+  res.json([
+    {
+      id: 122,
+      name: "google",
+    },
+    {
+      id: 123,
+      name: "brave",
+    },
+  ]);
 });
 
 module.exports = router;

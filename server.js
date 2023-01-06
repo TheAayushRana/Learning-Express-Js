@@ -13,7 +13,11 @@ console.log(app.get("view engine")); // ejs
 console.log(app.get("views")); // gives path in which views folder
 
 //Using Router -> 1st parameter (route) will be added to all routes of mainRouter
-app.use("/en", mainRouter);
+// app.use("/en", mainRouter);
+app.use(mainRouter);
+
+// Using global level middleware
+// app.use(apiKeyMiddleware);
 
 // It we want to change the views folder
 // app.set("views", path.resolve(__dirname) + "/templates");
