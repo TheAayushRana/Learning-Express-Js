@@ -27,6 +27,16 @@ app.use(express.json()); // json middle ware is used to take body from client
 app.use(mainRouter);
 app.use(productRouter);
 
+// If a route is not present in any router then this middleware will run
+app.use((req, res) => {
+  res.status(404).json({ message: "404 page" });
+});
+
+// Creating error handing middleware
+app.use((err, req, res, next) => {
+  res.json({ message: err.message });
+});
+
 // Using global level middleware
 // app.use(apiKeyMiddleware);
 

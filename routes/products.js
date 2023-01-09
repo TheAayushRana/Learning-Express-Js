@@ -13,14 +13,17 @@ router.get("/api/products", (req, res) => {
 });
 
 // POST Request
-router.post("/api/products", (req, res) => {
+router.post("/api/products", (req, res, next) => {
   // req.body is used to get body from client
   const { name, price } = req.body;
   if (!name || !price) {
+    // Using in Built Express Error handling
+    throw new Error("All fields are required");
+
     // sending status and response message
-    return res.status(442).json({
-      message: "All fields are required",
-    });
+    // return res.status(442).json({
+    //   message: "All fields are Required",
+    // });
   }
   const newProduct = {
     name,
