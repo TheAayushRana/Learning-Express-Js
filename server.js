@@ -2,6 +2,7 @@
 
 // Imported Express
 const express = require("express"); // It returns a function
+const ErrorHandling = require("./error/ErrorHandling");
 const app = express(); // Calling this function gives all methods
 const PORT = process.env.PORT || 4000;
 const mainRouter = require("./routes/index"); // Importing router from Routes folder
@@ -28,13 +29,30 @@ app.use(mainRouter);
 app.use(productRouter);
 
 // If a route is not present in any router then this middleware will run
-app.use((req, res) => {
-  res.status(404).json({ message: "404 page" });
+app.use((req, res, next) => {
+  next(ErrorHandling.notFoundError());
+  // res.status(404).json({ message: "404 page" });
 });
 
 // Creating error handing middleware
 app.use((err, req, res, next) => {
-  res.json({ message: err.message });
+  // Checking ki Error aa raha ha vo ErrorHanding class ka object ha kya
+  if (err instanceof ErrorHandling) {
+    res.status(err.status).json({
+      error: {
+        status: err.status,
+        message: err.message,
+      },
+    });
+  } else {
+    // Agar error us class ka nahi aa raha ha to generic error  
+    res.status(500).json({
+      error: {
+        status: err.status,
+        message: err.message,
+      },
+    });
+  }
 });
 
 // Using global level middleware

@@ -1,5 +1,7 @@
 const router = require("express").Router();
+const ErrorHandling = require("../error/ErrorHandling");
 let productsData = require("../productData");
+const apiKeyMiddleware = require("../middlewares/apiKey");
 
 router.get("/products", (req, res) => {
   res.render("products", {
@@ -13,12 +15,21 @@ router.get("/api/products", (req, res) => {
 });
 
 // POST Request
-router.post("/api/products", (req, res, next) => {
+router.post("/api/products", apiKeyMiddleware, (req, res, next) => {
+  // try {
+  //   console.log(city);
+  // } catch (error) {
+  //   next(ErrorHandling.serverError(error.message));
+  // }
+
   // req.body is used to get body from client
   const { name, price } = req.body;
   if (!name || !price) {
+    // next call karna ha -> className.staticMethodName
+    next(ErrorHandling.validationError("Names and Price fields are required"));
+
     // Using in Built Express Error handling
-    throw new Error("All fields are required");
+    // throw new Error("All fields are required");
 
     // sending status and response message
     // return res.status(442).json({

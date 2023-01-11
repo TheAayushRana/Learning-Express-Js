@@ -1,3 +1,5 @@
+const ErrorHandling = require("../error/ErrorHandling");
+
 // Middleware function takes 3 arguments req, res and next
 function apiKey(req, res, next) {
   const api_Key = "12345";
@@ -5,7 +7,8 @@ function apiKey(req, res, next) {
   if (userApiKey && userApiKey === api_Key) {
     next(); // next is used to pass on to the next middleware function
   } else {
-    res.json({ message: "Not allowed" });
+    next(ErrorHandling.forBidden());
+    // res.json({ message: "Not allowed" });
   }
 }
 
